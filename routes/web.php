@@ -44,9 +44,9 @@ Route::prefix('/cms/admin/')->group(function () {
     Route::post('update-opinions/{id}' , [\App\Http\Controllers\OpinionController::class , 'opinions'])->name('update-opinions');
 });
 
-Route::prefix('cms/')->middleware('guest:admin , author')->group(function () {
-    Route::get('{guard}/login' , [UserAuthController::class , 'showlogin'])->name('view.login');
-    Route::post('{guard}/login' , [UserAuthController::class , 'login'])->name('login');
+Route::prefix('cms/')->middleware('guest:admin,author')->group(function () {
+    Route::get('{guard}/login', [UserAuthController::class , 'showlogin'])->name('view.login');
+    Route::post('{guard}/login', [UserAuthController::class , 'login'])->name('login');
 
 //    Route::get('author/login', 'UserAuthController@showLogin')->name('view.login.author');
 //    Route::post('author/login', 'UserAuthController@login')->name('login.author');
