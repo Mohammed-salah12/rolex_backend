@@ -44,7 +44,16 @@ Route::prefix('/cms/admin/')->group(function () {
     Route::post('update-opinions/{id}' , [\App\Http\Controllers\OpinionController::class , 'opinions'])->name('update-opinions');
 });
 
+<<<<<<< HEAD
 Route::prefix('cms/')->middleware('guest:admin , author')->group(function () {
+=======
+// Route::prefix('cms/')->middleware('guest:admin,author')->group(function () {
+//     Route::get('{guard}/login' , [UserAuthController::class , 'showlogin'])->name('view.login');
+//     Route::post('{guard}/login' , [UserAuthController::class , 'login'])->name('login');
+
+
+Route::prefix('cms/')->middleware('guest:admin,author')->group(function () {
+>>>>>>> 4608ee4 (fixTheErrors)
     Route::get('{guard}/login' , [UserAuthController::class , 'showlogin'])->name('view.login');
     Route::post('{guard}/login' , [UserAuthController::class , 'login'])->name('login');
 
