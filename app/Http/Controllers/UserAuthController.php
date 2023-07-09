@@ -48,9 +48,9 @@ class UserAuthController extends Controller
         $request->session()->invalidate();
 
         if ($guard === 'admin') {
-            return redirect()->route('view.login', 'admin');
+            return redirect()->route('login', 'admin');
         } elseif ($guard === 'author') {
-            return redirect()->route('view.login', 'author');
+            return redirect()->route('login', 'author');
         }
     }
 

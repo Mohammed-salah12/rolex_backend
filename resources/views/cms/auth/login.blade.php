@@ -28,7 +28,7 @@
             <p class="login-box-msg">Sign in to start your session</p>
 
             <!-- Admin login form -->
-            <form>
+            <form action="{{ route('login.submit', ['guard' => 'author']) }}" method="post">
                 <div class="input-group mb-3">
                     <input type="email" class="form-control" id="admin_gmail" name="admin_gmail" placeholder="Admin Gmail">
                     <div class="input-group-append">
@@ -148,6 +148,7 @@
             });
     }
 </script>
+
 
 <script src="{{asset('cms/jss/crud.js')}}"></script>
 

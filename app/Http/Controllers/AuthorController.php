@@ -88,10 +88,6 @@ class AuthorController extends Controller
        ]);
 
         $authors = Author::findOrFail($id);
-
-//        $author = $this->authorRepository->findId($id);
-//        $authors->update($request->only('gmail'));
-
         $validator = Validator($request->all() , [
             'password' => 'nullable',
             'gmail'=> 'required|email'
