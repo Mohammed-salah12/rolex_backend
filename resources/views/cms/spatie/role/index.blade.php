@@ -1,10 +1,11 @@
+
 @extends('cms.parent')
 
 @section('title' , ' Admin')
 
-@section('main-title' , 'Index homepage')
+@section('main-title' , 'Index Admin')
 
-@section('sub-title' , 'index homepage')
+@section('sub-title' , 'index Admin')
 
 @section('styles')
 
@@ -39,7 +40,7 @@
             <div class="card">
               <div class="card-header">
                 {{-- <h3 class="card-title"> Index Data of Admin</h3> --}}
-                <a href="{{ route('products.create') }}" type="button" class="btn btn-info">Add New home page</a>
+                <a href="{{ route('roles.create') }}" type="button" class="btn btn-info">Add New Admin</a>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
@@ -58,37 +59,29 @@
                 <table class="table table-hover text-nowrap">
                   <thead>
                     <tr>
-                      <th>img</th>
-                      <th>id</th>
-                      <th>title</th>
-                        <th>discription</th>
-                        <th>price</th>
+                      <th>ID</th>
+                      <th>name</th>
+                        <th>guard_name</th>
 
+                        <th>Seeting</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($homepages as $homepage )
-                    {{-- <td><span class="tag tag-success">Approved</span></td> --}}
+                    @foreach ($roles as $role)
                     <tr>
-                        <td>
-                            <img class="img-circle img-bordered-sm" src="{{asset('storage/images/homepages/'.$homepage->img)}}" width="60" height="60" alt="User Image">
-                         </td>
-                        <td>{{$homepage->id}}</td>
-
-                        <td>{{$homepage->title}}</td>
-                        <td>{{ $homepage->discription }}</td>
-                        <td>{{ $homepage->price }}</td>
-
+                        <td>{{$role->id}}</td>
+                        <td>{{$role->name}}</td>
+                        <td>{{$role->guard_name}}</td>
 
 
 
                         <td>
                             <div class="btn group">
-                              <a href="{{route('homepages.edit' , $homepage->id)}}" type="button" class="btn btn-info">
+                              <a href="{{route('admins.edit' , $role->id)}}" type="button" class="btn btn-info">
                                 <i class="fas fa-edit"></i>
                                 {{-- <i class="far fa-edit"></i> --}}
                               </a>
-                              <a href="#" type="button" onclick="performDestroy({{ $homepage->id }} , this)" class="btn btn-danger">
+                              <a href="#" type="button" onclick="performDestroy({{ $role->id }} , this)" class="btn btn-danger">
                                 <i class="fas fa-trash-alt"></i>
                               </a>
 
@@ -99,13 +92,15 @@
                       </tr>
                     @endforeach
 
+
                   </tbody>
                 </table>
               </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
-            {{ $homepages->links()}}
+
+              {{ $roles->links()}}
           </div>
         </div>
 
@@ -120,7 +115,7 @@
 @section('scripts')
   <script>
     function performDestroy(id , referance){
-      let url = '/cms/admin/homepages/'+id;
+      let url = '/cms/admin/roles/'+id;
       confirmDestroy(url , referance );
     }
 </script>

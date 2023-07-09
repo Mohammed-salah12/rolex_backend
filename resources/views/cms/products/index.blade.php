@@ -59,8 +59,13 @@
                   <thead>
                     <tr>
                       <th>img</th>
-                      <th>name</th>
+                        <th>id</th>
+                        <th>name</th>
                       <th>price</th>
+                        <th>status</th> <!-- New column for status/badge -->
+                        <th>featured</th> <!-- New column for status/badge -->
+
+                        <th>actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -70,10 +75,28 @@
                         <td>
                             <img class="img-circle img-bordered-sm" src="{{asset('storage/images/products/'.$product->img)}}" width="60" height="60" alt="User Image">
                          </td>
+                        <td>{{$product->id}}</td>
+
                         <td>{{$product->product_name}}</td>
                         <td>{{ $product->price_product }}</td>
 
+                        <td>
+                            @if ($product->is_new==1)
+                                <span class="badge badge-success">New</span>
+                            @else
+                                <span class="badge badge-secondary">Old</span>
+                            @endif
+                        </td>
+                        <td>
 
+                        @if ($product->is_featured == 1)
+                            <span class="badge badge-primary">Featured</span>
+
+                            @else
+                                <span class="badge badge-secondary">normal</span>
+
+                            @endif
+                        </td>
 
                         <td>
                             <div class="btn group">

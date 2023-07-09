@@ -1,10 +1,10 @@
 @extends('cms.parent')
 
-@section('title' , ' Admin')
+@section('title' , ' opinion')
 
-@section('main-title' , 'Index homepage')
+@section('main-title' , 'Index opinions')
 
-@section('sub-title' , 'index homepage')
+@section('sub-title' , 'index opinions')
 
 @section('styles')
 
@@ -39,7 +39,7 @@
             <div class="card">
               <div class="card-header">
                 {{-- <h3 class="card-title"> Index Data of Admin</h3> --}}
-                <a href="{{ route('products.create') }}" type="button" class="btn btn-info">Add New home page</a>
+                <a href="{{ route('opinions.create') }}" type="button" class="btn btn-info">Add New Product</a>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
@@ -60,35 +60,39 @@
                     <tr>
                       <th>img</th>
                       <th>id</th>
-                      <th>title</th>
-                        <th>discription</th>
-                        <th>price</th>
+                      <th>name</th>
+                        <th>job name</th>
+                        <th>massage</th>
+                        <th>created_at</th>
+
+
 
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($homepages as $homepage )
+                    @foreach ($opinions as $opinion )
                     {{-- <td><span class="tag tag-success">Approved</span></td> --}}
                     <tr>
                         <td>
-                            <img class="img-circle img-bordered-sm" src="{{asset('storage/images/homepages/'.$homepage->img)}}" width="60" height="60" alt="User Image">
+                            <img class="img-circle img-bordered-sm" src="{{asset('storage/images/opinion/'.$opinion->img)}}" width="60" height="60" alt="User Image">
                          </td>
-                        <td>{{$homepage->id}}</td>
+                        <td>{{$opinion->id}}</td>
+                        <td>{{$opinion->name}}</td>
+                        <td>{{$opinion->job_name}}</td>
+                        <td>{{$opinion->massage}}</td>
+                        <td>{{$opinion->created_at}}</td>
 
-                        <td>{{$homepage->title}}</td>
-                        <td>{{ $homepage->discription }}</td>
-                        <td>{{ $homepage->price }}</td>
 
 
 
 
                         <td>
                             <div class="btn group">
-                              <a href="{{route('homepages.edit' , $homepage->id)}}" type="button" class="btn btn-info">
+                              <a href="{{route('opinions.edit' , $opinion->id)}}" type="button" class="btn btn-info">
                                 <i class="fas fa-edit"></i>
                                 {{-- <i class="far fa-edit"></i> --}}
                               </a>
-                              <a href="#" type="button" onclick="performDestroy({{ $homepage->id }} , this)" class="btn btn-danger">
+                              <a href="#" type="button" onclick="performDestroy({{ $opinion->id }} , this)" class="btn btn-danger">
                                 <i class="fas fa-trash-alt"></i>
                               </a>
 
@@ -105,7 +109,7 @@
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
-            {{ $homepages->links()}}
+            {{ $opinions->links()}}
           </div>
         </div>
 
@@ -120,7 +124,7 @@
 @section('scripts')
   <script>
     function performDestroy(id , referance){
-      let url = '/cms/admin/homepages/'+id;
+      let url = '/cms/admin/opinions/'+id;
       confirmDestroy(url , referance );
     }
 </script>

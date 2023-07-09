@@ -224,8 +224,34 @@
 
           <li class="nav-header">User Mangment </li>
 
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fab fa-product-hunt"></i>
+                    {{-- <i class="far fa-user"></i> --}}
+                    <p>
+                        author
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{route('authors.index')}}" class="nav-link">
+                            <i class="fas fa-list-ul nav-icon"></i>
+                            {{-- <i class="fas fa-list-ul"></i> --}}
+                            <p>Index</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('authors.create')}}" class="nav-link">
+                            {{-- <i class="fas fa-plus nav-icon"></i> --}}
+                            <i class="fa-sharp fa-solid fa-folder-plus"></i>
+                            {{-- <i class="fas fa-plus"></i> --}}
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
- 
           <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="fab fa-product-hunt"></i>
@@ -253,6 +279,34 @@
               </li>
             </ul>
           </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fab fa-product-hunt"></i>
+                    {{-- <i class="far fa-user"></i> --}}
+                    <p>
+                        roles
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{route('roles.index')}}" class="nav-link">
+                            <i class="fas fa-list-ul nav-icon"></i>
+                            {{-- <i class="fas fa-list-ul"></i> --}}
+                            <p>Index</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('roles.create')}}" class="nav-link">
+                            {{-- <i class="fas fa-plus nav-icon"></i> --}}
+                            <i class="fa-sharp fa-solid fa-folder-plus"></i>
+                            {{-- <i class="fas fa-plus"></i> --}}
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
 
           <li class="nav-item">
             <a href="#" class="nav-link">
@@ -281,13 +335,66 @@
               </li>
             </ul>
           </li>
-          
-        
-
-       
 
 
-     
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="fab fa-product-hunt"></i>
+                                              {{-- <i class="far fa-user"></i> --}}
+              <p>
+                admin
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('admins.index')}}" class="nav-link">
+                  <i class="fas fa-list-ul nav-icon"></i>
+                  {{-- <i class="fas fa-list-ul"></i> --}}
+                  <p>Index</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('admins.create')}}" class="nav-link">
+                  {{-- <i class="fas fa-plus nav-icon"></i> --}}
+                  <i class="fa-sharp fa-solid fa-folder-plus"></i>
+                  {{-- <i class="fas fa-plus"></i> --}}
+                  <p>Create</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fab fa-product-hunt"></i>
+                    {{-- <i class="far fa-user"></i> --}}
+                    <p>
+                        opinion
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{route('opinions.index')}}" class="nav-link">
+                            <i class="fas fa-list-ul nav-icon"></i>
+                            {{-- <i class="fas fa-list-ul"></i> --}}
+                            <p>Index</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('opinions.create')}}" class="nav-link">
+                            {{-- <i class="fas fa-plus nav-icon"></i> --}}
+                            <i class="fa-sharp fa-solid fa-folder-plus"></i>
+                            {{-- <i class="fas fa-plus"></i> --}}
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+
 
 
 
@@ -326,13 +433,26 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            {{--  <a href="{{ route('view.test') }}" class="nav-link">  --}}
-              <i class="far fa-sign-out nav-icon"></i>
-              <i class="fas fa-sign-out"></i>
-              <p>Logout</p>
-            </a>
-          </li>
+                 @auth('admin')
+                     <li class="nav-item">
+                         <a href="{{ route('view.test') }}" class="nav-link">
+                             <i class="far fa-sign-out nav-icon"></i>
+                             <i class="fas fa-sign-out"></i>
+                             <p>Logout (Admin)</p>
+                         </a>
+                     </li>
+                 @endauth
+
+                 <!-- Author logout button -->
+                 @auth('author')
+                     <li class="nav-item">
+                         <a href="{{ route('logout.author') }}" class="nav-link">
+                             <i class="far fa-sign-out nav-icon"></i>
+                             <i class="fas fa-sign-out"></i>
+                             <p>Logout (Author)</p>
+                         </a>
+                     </li>
+                 @endauth
 
         </ul>
       </nav>

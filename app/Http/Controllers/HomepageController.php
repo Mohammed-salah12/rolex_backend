@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Homepage;
 use App\Models\Homepages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class HomepageController extends Controller
 {
@@ -40,7 +41,7 @@ class HomepageController extends Controller
     {
         $validator = Validator($request->all(), [
             'title' => 'string',
-            
+
         ]);
 
         if (!$validator->fails()) {

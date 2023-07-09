@@ -1,10 +1,10 @@
  @extends('cms.parent')
 
-@section('title' , 'Admin')
+@section('title' , 'opinions')
 
-@section('main-title' , 'Create product')
+@section('main-title' , 'Create opinions')
 
-@section('sub-title' , 'create product')
+@section('sub-title' , 'create opinions')
 
 @section('styles')
 
@@ -19,7 +19,7 @@
           <!-- general form elements -->
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Create new product</h3>
+              <h3 class="card-title">Create new opinions</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
@@ -29,13 +29,19 @@
               <div class="row">
 
                 <div class="form-group col-md-6">
-                  <label for="product_name">name_product</label>
-                  <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter product name">
+                  <label for="massage">massage</label>
+                  <input type="text" class="form-control" id="massage" name="massage" placeholder="Enter massage">
                 </div>
 
+
+                  <div class="form-group col-md-6">
+                      <label for="name">name</label>
+                      <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+                  </div>
+
                 <div class="form-group col-md-6">
-                  <label for="price_product">price_product</label>
-                  <input type="text" class="form-control" id="price_product" name="price_product" placeholder="Enter price of product">
+                  <label for="job_name">job_name</label>
+                  <input type="text" class="form-control" id="job_name" name="job_name" placeholder="Enter job_name">
                 </div>
               </div>
 
@@ -44,17 +50,14 @@
                 <input type="file" class="form-control" id="img" name="img" placeholder="Enter img of product">
               </div>
                </div>
-                <div class="form-group col-md-6 w-25 mb-1">
-                    <label for="is_featured">Featured</label>
-                    <input type="checkbox" class="form-control w-25 mb-1" id="is_featured" name="is_featured">
-                </div>
+
 
 
               <!-- /.card-body -->
 
               <div class="card-footer">
                 <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
-                <a href="{{ route('products.index') }}" type="button" class="btn btn-info">Return Back</a>
+                <a href="{{ route('opinions.index') }}" type="button" class="btn btn-info">Return Back</a>
 
               </div>
             </form>
@@ -78,12 +81,12 @@
     function performStore(){
 
       let formData = new FormData();
-      formData.append('product_name',document.getElementById('product_name').value);
-      formData.append('price_product',document.getElementById('price_product').value);
+      formData.append('massage',document.getElementById('massage').value);
+      formData.append('name',document.getElementById('name').value);
+      formData.append('job_name',document.getElementById('job_name').value);
       formData.append('img',document.getElementById('img').files[0]);
-      formData.append('is_featured', document.getElementById('is_featured').checked ? 1 : 0);
 
-        store('/cms/admin/products' , formData);
+        store('/cms/admin/opinions' , formData);
     }
 
   </script>

@@ -43,7 +43,14 @@
                   <label for="img">Image of Author</label>
                   <input type="file" class="form-control" id="img" name="img" placeholder="Enter img of product">
                 </div>
-                 </div>  
+                 </div>
+                  <div class="form-group col-md-6">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="is_featured"
+                                 name="is_featured" {{ $products->is_featured == 1 ? 'checked' : '' }}>
+                          <label class="form-check-label" for="is_featured">Featured</label>
+                      </div>
+                  </div>
 
 
 
@@ -77,7 +84,8 @@
       let formData = new FormData();
       formData.append('product_name',document.getElementById('product_name').value);
       formData.append('price_product',document.getElementById('price_product').value);
-      formData.append('img',document.getElementById('img').files[0]);
+        formData.append('img',document.getElementById('img').files[0]);
+        formData.append('is_featured', document.getElementById('is_featured').checked ? 1 : 0);
 
       storeRoute('/cms/admin/update-products/'+id , formData);
     }
