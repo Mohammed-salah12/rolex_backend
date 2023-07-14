@@ -77,8 +77,8 @@
                          </td>
                         <td>{{$product->id}}</td>
 
-                        <td>{{$product->product_name}}</td>
-                        <td>{{ $product->price_product }}</td>
+                        <td>{{$product->name}}</td>
+                        <td>{{ $product->price }}</td>
 
                         <td>
                             @if ($product->is_new==1)

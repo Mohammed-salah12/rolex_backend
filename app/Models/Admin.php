@@ -12,4 +12,9 @@ class Admin extends Authenticatable
 {
     use HasFactory , HasRoles;
 
+    protected $fillable = [
+        'gmail',
+        'password',
+    ];
+
 }

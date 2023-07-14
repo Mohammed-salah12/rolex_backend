@@ -2,22 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\HomePageRequest;
 use App\Models\Homepage;
-use App\Models\Homepages;
+use App\repositories\HomePageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class HomepageController extends Controller
 {
     /**
+     * @var HomePageRepository
+     */
+    private $homePageRepository;
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct(HomePageRepository $homePageRepository)
+    {
+
+        $this->homePageRepository = $homePageRepository;
+    }
     public function index()
     {
-      $homepages=Homepage::orderBy('id' , 'desc')->paginate(5);
-      return response()->view('cms.homepages.index' , compact('homepages'));
+      $homepages=$this->homePageRepository->getLatestHomePagesWithPaginate();
+        $this->authorize('viewAny' , Homepage::class);
+        return $this->generateResponse('index' , compact('homepages'));
     }
 
     /**
@@ -27,8 +40,9 @@ class HomepageController extends Controller
      */
     public function create()
     {
-        $homepages=Homepage::all();
-        return response()->view('cms.homepages.create' , compact('homepages'));
+        $homepages=$this->homePageRepository->getPage();
+        $this->authorize('create' , Homepage::class);
+        return $this->generateResponse('create' , compact('homepages'));
     }
 
     /**
@@ -37,53 +51,26 @@ class HomepageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HomePageRequest $request)
     {
-        $validator = Validator($request->all(), [
-            'title' => 'string',
-
-        ]);
-
-        if (!$validator->fails()) {
-            $homepages = new Homepage();
-            if (request()->hasFile('img')) {
-
-                $img = $request ->file('img');
-
-                $imgName = time() . 'img.' . $img->getClientOriginalExtension();
-
-                $img->move('storage/images/homepages', $imgName);
-
-                $homepages->img = $imgName;
-            }
-
-            $homepages->title = $request->get('title');
-            $homepages->discription = $request->get('discription');
-            $homepages->price = $request->get('price');
-
-
-            $isSaved  = $homepages->save();
-
-            if ($isSaved) {
-                return response()->json(['icon' => 'success', 'title' => "Created is successfully"], 200);
-            } else {
-                return response()->json(['icon' => 'Failed', 'title' => "Created is Failed"], 400);
-            }
+        $homepages = new Homepage($request->validated());
+        if (request()->hasFile('img')) {
+            $img = $request->file('img');
+            $imgName = time() . 'img.' . $img->getClientOriginalExtension();
+            $img->move('storage/images/homepages', $imgName);
+            $homepages->img = $imgName;
+        }
+        $isSaved = $homepages->save();
+        if ($isSaved) {
+            $response = $this->generateSweetAlertResponse('success');
+            return $response;
         } else {
-            return response()->json(['icon' => 'error', 'title' => $validator->getMessageBag()->first()], 400);
+            $response = $this->generateSweetAlertResponse('error');
+            return $response;
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -93,8 +80,9 @@ class HomepageController extends Controller
      */
     public function edit($id)
     {
-        $homepages=Homepage::findOrFail($id);
-        return response()->view('cms.homepages.edit' , compact('homepages'));
+        $this->authorize('update' , Homepage::class);
+        $homepages=$this->homePageRepository->findId($id);
+        return $this->generateResponse('edit' , compact('homepages'));
     }
 
     /**
@@ -104,44 +92,25 @@ class HomepageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(HomePageRequest $request, $id)
     {
-        $validator = Validator($request->all() , [
-            'title' => 'required|string|',
-        ]);
 
-        if (! $validator->fails()){
+        $homepages = $this->homePageRepository->findId($id);
+        $homepages->update($request->validated());
 
-            $homepages = Homepage::findOrFail($id);
-            $homepages->title = $request->get('title');
-            $homepages->discription = $request->get('discription');
-            $homepages->price = $request->get('price');
-            $isUpdated = $homepages->save();
-
-            if (request()->hasFile('img')) {
-
-                $img = $request->file('img');
-
-                $imageName = time() . 'img.' . $img->getClientOriginalExtension();
-
-                $img->move('storage/images/homepages', $imageName);
-
-                $homepages->img = $imageName;
-                }
-                $isUpdated = $homepages->save();
-
-            return ['redirect' => route('homepages.index')];
-            if($isUpdated){
-                return response()->json(['icon' => 'success' , 'title' => 'Updated is Successfully'] , 200);
-            }
-            else{
-                return response()->json(['icon' => 'error' , 'title' => 'Updated is Failed'] , 400);
-
-            }
+        if ($request->hasFile('img')) {
+            $img = $request->file('img');
+            $imageName = time() . 'img.' . $img->getClientOriginalExtension();
+            $img->move('storage/images/homepages', $imageName);
+            $homepages->img = $imageName;
+            $homepages->save();
         }
-        else{
-            return response()->json(['icon' => 'error' , 'title' => $validator->getMessageBag()->first()] , 400);
-        }
+
+
+
+        return ['redirect'=>route('homepages.index')];
+
+
     }
 
     /**
@@ -152,6 +121,33 @@ class HomepageController extends Controller
      */
     public function destroy($id)
     {
-      $homepages=Homepage::destroy($id);
+        $this->authorize('delete', Homepage::class);
+        $this->homePageRepository->findId($id);
+        $this->homePageRepository->delete($id);
+
+    }
+
+
+    function generateResponse($action, $data = [])
+    {
+        $view = 'cms.homepages.' . $action;
+        return response()->view($view, $data);
+    }
+
+    function generateSweetAlertResponse($status)
+    {
+        $response = [];
+
+        if ($status === 'success') {
+            $response['icon'] = 'success';
+            $response['title'] = 'Worked successfully';
+            $responseCode = 200;
+        } else {
+            $response['icon'] = 'error';
+            $response['title'] = 'Something went wrong ';
+            $responseCode = 400;
+        }
+
+        return response()->json($response, $responseCode);
     }
 }

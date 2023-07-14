@@ -1,0 +1,905 @@
+*{
+    box-sizing: border-box;
+    outline: 0;
+}
+ :root{
+    $mainColor: #fbab54;
+    $blackColor : #262626 ;
+    $gray:#bfbfbf;
+    $gray-light: #fdfdfd;
+ }
+   
+
+::selection{
+    background-color: $mainColor;
+    color: white;
+}
+.scrollspy-example{
+    border-color: transparent !important;
+    border-width: 0px !important;
+
+}
+.dark {
+    $gray-light: #262626;
+  }
+body {
+   background-color: $gray-light;
+}
+i{
+    cursor: pointer;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+.nav-link{
+    color: $blackColor ;
+    text-decoration: none;
+    font-size: 19px ;
+}
+.textWhite {
+    color: white;
+}
+.nav-link:hover {
+    color: $mainColor;
+    
+}
+.nav-link.active{
+    color: $mainColor ;
+}
+.headerScoll {
+    background-color: $gray-light;
+    box-shadow: 0 0 10px 0px #929292;
+  }
+
+
+.cardbgc{
+    background-color: #373636;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+.showNav {
+    background-color: white;
+    box-shadow: 2px 1px 7px #bfbfbf;
+}
+
+.update {
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    z-index: 1000;
+    display: flex;
+   
+    .ss {
+       align-self: center;
+       margin: auto;
+       transform-origin: center center;
+       border-color: $mainColor;
+       border-left-color: transparent;
+    }
+}
+
+main {
+   margin-bottom: 90px;
+  
+   nav{
+    opacity: 0;
+
+    .fa-lock {
+        position: relative;
+        span {
+            display: block;
+            padding: 5px 3px;
+            background-color: $blackColor;
+            color: white;
+            width: 23px;
+            height: 23px;
+            font-size: 12px;
+            border-radius: 50%;
+            position: absolute;
+            top:-80%;
+            right: -65%;
+            opacity: 0;
+            text-align: center;
+        }
+    }
+   }
+   
+.hero {
+    height: 100vh ;
+    position: relative;
+    .scoial-links{
+        transform: rotate(-90deg) ;
+        position: absolute;
+        left: -17%;
+        top: 56%;
+        display: flex;
+        gap: 25px;
+    
+        a {
+            color: grey ;
+        }
+    }
+
+    .content {
+      
+       .price {
+        color: $mainColor;
+        font-size: 2rem;
+        font-weight: 600;
+
+       }
+       .one {
+            background-color: $gray;
+            font-weight: lighter !important;
+            font-weight:500 !important;
+           
+        }
+    }
+
+    .HeroImg {
+        background-color: $mainColor;
+        height: 100vh;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        
+        .box {
+            width: 310px;
+            height: 425px;
+        }
+    }
+}
+}
+
+
+// feature
+.feature {
+    text-align: center;
+    min-height: 100vh;
+    margin-bottom: 60px;
+
+    .container {
+        position: relative;
+    }
+
+    h2{
+        position: relative;
+    }
+    
+    h2::after {
+        content: "";
+        width: 10%;
+        height: 3px;
+        background-color: $mainColor;
+        display: block;
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translate(-50% , 0);
+
+    }
+    .col {
+        .card {
+            border-radius: 0%;
+            transition: 0.5s;
+            .catg {
+                display: block;
+                width: 80px;
+                background-color: $mainColor;
+                color: white;
+                padding: 10px 20px;
+                text-transform: uppercase;
+                font-weight: 500;
+                transform-origin:  top left;
+                transform: rotate(-90deg) translate(-130%);
+            }
+
+            .imgboxs {
+                width: 34%;
+                margin: auto;   
+                     }
+            h6 {
+                color: $mainColor;
+            }
+
+            button {
+                transition: 0.5s;
+                opacity: 0;
+                transform: translateY(-60%);
+            }
+            &:hover {
+                padding-bottom: 20px;
+                button {
+                    transform: translateY(20%);
+                    opacity: 1;
+                }
+            }
+            
+        }
+    }
+ 
+    .carousel {
+        
+       .btnone {
+        position: absolute;
+        top: 110%;
+        left : 38%;
+        opacity: 1;
+        box-shadow: 2px 1px 7px #bfbfbf;
+        width: 30px;
+        height: 23px;
+        background-color: white;
+
+       
+           
+            i {
+                color: $mainColor;
+                font-size: 18px;
+                
+            }
+        
+       }
+
+       .btntwo {
+        position: absolute;
+        top: 110%;
+        right : 38%;
+        opacity: 1;
+        box-shadow: 2px 1px 7px #bfbfbf;
+        width: 30px;
+        height: 23px;
+        background-color: white;
+
+        
+            i {
+                color: $mainColor;
+                font-size: 18px;
+            }
+       
+
+    }
+       
+
+    
+    }
+
+   
+   
+   
+
+}
+
+
+// Story
+.story {
+    margin-bottom: 50px;
+    .left {
+        margin: 48px;
+        width: 40%;
+        background-color: $mainColor;
+
+        .imgbox {
+            transform: translate(15% ,-15%);
+        }
+    }
+
+    .right {
+        margin-left: 70px;
+        width: 400px;
+        padding: 70px 0;
+
+        h3 {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+
+        h3::after {
+            content: "";
+            width: 17%;
+            height: 3px;
+            background-color: $mainColor;
+            display: block;
+            position: absolute;
+            top: -15px;
+            left: 8%;
+            transform: translate(-50% , 0);
+    
+        }
+        p {
+            margin-bottom: 63px;
+            color: grey;
+        }
+        a {
+            color:white;
+            background-color: $blackColor ;
+            padding: 15px 25px;
+        }
+    }
+   
+}
+
+//product
+.product {
+    text-align: center;
+    min-height: 100vh;
+    margin-bottom: 60px;
+
+    .container {
+        position: relative;
+
+
+        h2{
+            position: relative;
+        }
+        
+        h2::after {
+            content: "";
+            width: 10%;
+            height: 3px;
+            background-color: $mainColor;
+            display: block;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translate(-50% , 0);
+    
+        }
+
+        .row {
+            margin: auto;
+            margin-left: 60px;
+        .col {
+           
+            // margin: 0 auto 50px;
+            margin-bottom: 50px;
+            .card {
+                border-radius: 0%;
+                transition: 0.5s;
+                padding: 15px;
+    
+                .imgboxs {
+                    padding: 15px 0;
+                    width: 34%;
+                    margin: auto;   
+                         }
+
+               
+                .card-body {
+                    position: relative;
+
+                    h5 {
+                        margin-top: 10px;
+                        margin-bottom: 5px;
+                    }         
+                    h6 {
+                        color: $mainColor;
+                    }
+                    i {
+                        position: absolute;
+                        bottom: -13%;
+                        right: -7%;
+                        font-size: 20px;
+                        background-color: $blackColor;
+                        color: white;
+                        display: block;
+                        padding: 6px 10px;
+                        
+                    }
+                }
+    
+               
+            }
+        }
+
+    }
+    }
+
+    
+
+   
+
+   
+   
+   
+
+}
+
+
+
+.prods{
+    opacity: 0;
+}
+
+// Comments
+.comment {
+    margin-bottom: 100px;
+
+   .card{
+    width: 88%;
+    margin: auto;
+    border : 0px solid white ;
+
+    i {
+        display: block;
+        font-size: 35px;
+        color: $mainColor;
+        padding: 18px 20px ;
+        background-color: white;
+        box-shadow: 2px 1px 7px #bfbfbf;
+        width: 70px;
+        height: 70px;
+        margin-bottom: 25px;
+    }
+
+    .img {
+        width: 80px;
+        height: 80px;
+        margin: 30px 15px 20px 0;
+
+        img {
+            border-radius: 50%;
+        }
+    }
+   }
+
+    .carousel {
+        position: relative;
+    .btnone {
+     position: absolute;
+     top: 105%;
+     left : 10%;
+     opacity: 1;
+     box-shadow: 2px 1px 7px #bfbfbf;
+     width: 33px;
+     height: 26px;
+     background-color: white;
+
+    
+        
+         i {
+             color: $mainColor;
+             font-size: 18px;
+             
+         }
+     
+    }
+
+    .btntwo {
+     position: absolute;
+     top: 105%;
+     right : 70%;
+     opacity: 1;
+     box-shadow: 2px 1px 7px #bfbfbf;
+     width: 33px;
+     height: 26px;
+     background-color: white;
+
+     
+         i {
+             color: $mainColor;
+             font-size: 18px;
+         }
+    
+
+ }
+    
+
+ 
+ }
+
+   
+
+
+    .right {
+        margin: 48px;
+        margin: auto;
+        width: 40%;
+        
+
+
+        .imgbox {
+            background-color: $mainColor;
+            img {
+                transform: translate(-15% ,15%);
+            }
+        }
+    }
+
+    
+   
+}
+
+//new
+.new {
+    text-align: center;
+    min-height: 80vh;
+    margin-bottom: 60px;
+
+    .container {
+        position: relative;
+    }
+
+    h2{
+        position: relative;
+    }
+    
+    h2::after {
+        content: "";
+        width: 10%;
+        height: 3px;
+        background-color: $mainColor;
+        display: block;
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translate(-50% , 0);
+
+    }
+    .col {
+        .card {
+            border-radius: 0%;
+            .catg {
+                display: block;
+                width: 65px;
+                background-color: $mainColor;
+                color: white;
+                padding: 5px 10px;
+                font-weight: 500;
+                transform:  translate( 225% , 25%);
+            }
+
+            .imgboxs {
+                width: 34%;
+                margin: auto;   
+                     }
+            h6 {
+                color: $mainColor;
+            }
+
+          
+           
+            
+        }
+    }
+
+}
+
+// Foot up
+.footup {
+    
+    .container {
+        width: 77%;
+        background-color: $mainColor;
+        margin: auto;
+        padding: 20px 65px;
+        
+        .left {
+           h3 {
+            font-size: 40px;
+            margin-bottom: 30px;
+           }
+           p{
+            color: rgb(89, 89, 89);
+            font-weight: 700;
+           }
+        }
+
+        .right {
+            padding: 90px 30px;
+            input {
+                width: 280px;
+                height: 50px;
+                padding: 15px;
+                border:0px;
+
+            }
+
+                .link {
+                    button {
+                        height: 50px;
+                        padding: 15px 20px;
+                        border:0px;
+                        background-color: $blackColor;
+                        color: white;
+                    }
+                }
+               
+
+           
+        }
+    }
+}
+
+// Footdown
+footer {
+
+    .container {
+        width: 77%;
+        margin: auto;
+        padding-bottom: 60px;
+        border-bottom: 2px solid #dddddd;
+        .col {
+           
+            h4 {
+                margin-bottom: 15px;
+            }
+            a {
+                display: block ;
+                color: $blackColor;
+                padding-bottom: 6px;
+            }
+
+            .icon {
+                  i{
+                    margin-right: 20px;
+                    font-size: 18px;
+                  }
+            }
+        }
+
+       
+    }
+}
+
+.up {
+    background-color: $gray-light;
+    color: $mainColor;
+    box-shadow: 2px 1px 7px #bfbfbf;
+    font-size: 24px;
+    padding: 5px 15px;
+    position: fixed;
+    right: 35px;
+    bottom: 25px;
+    cursor: pointer;
+    opacity: 0;
+    
+  }
+
+
+
+@media (max-width : 1200px) {
+    .new {
+        .container {
+                    .card {
+                        .catg {
+                            width: 50px;
+                            padding: 5px 10px;
+                            font-weight: 400;
+                            font-size: 13px;
+                            transform:  translate( 240% , 40%);
+                        }
+    
+                   
+            }
+        }
+               
+       }
+
+       .footup {
+    
+        .container {
+            width: 80%;
+            padding: 20px 40px;
+
+            .right {
+                padding: 90px 15px;
+                input {
+                    width: 230px;
+                }
+    
+                    .link {
+                        button {
+                            height: 50px;
+                            padding: 15px 15px;
+                        }
+                    }
+                   
+    
+               
+            }
+        }
+    }
+
+}
+
+@media (max-width : 990px) {
+   .feature {
+    margin-top: 500px;
+
+    .carousel {
+        
+        .btnone {
+            position: absolute;
+            top: 103%;
+            left : 33%;
+        }
+
+        .btntwo {
+            position: absolute;
+            top: 103%;
+            right : 33%;
+        }
+    }
+   }
+
+   .story {
+    .left{
+       width : 70%;
+    }
+   }
+
+   .product {
+    .container{
+    .row {
+        margin-left: 20px;
+    }
+}
+   }
+
+   .comment {
+
+    .carousel {
+       
+    .btnone {
+     position: absolute;
+     top: 105%;
+     left : 15%;
+     
+    }
+
+    .btntwo {
+     position: absolute;
+     top: 105%;
+     right : 60%;
+
+ }
+    
+
+ 
+    }
+
+
+    .left{
+        .card{
+        width: 80%;
+    }
+    }
+
+    .right{
+       width : 70%;
+       margin-top: 30px;
+       .imgbox {
+        margin-left: 30px;
+       }
+    }
+   }
+
+   .new {
+    .container {
+                .card {
+                    .catg {
+                        width: 50px;
+                        padding: 5px 10px;
+                        font-weight: 400;
+                        font-size: 13px;
+                        transform:  translate( 500% , 40%);
+                    }
+
+               
+        }
+    }
+           
+   }
+
+
+   .footup {
+    
+    .container {
+       
+        padding: 15px 35px;
+
+
+        .left {
+            h3 {
+             font-size: 32px;
+             margin-bottom: 30px;
+            }
+            p{
+                font-size: 15px;
+             color: rgb(89, 89, 89);
+             font-weight: 700;
+            }
+         }
+
+        .right {
+            input {
+                width: 180px;
+            }
+
+                .link {
+                    button {
+                        height: 50px;
+                        padding: 15px 12px;
+                    }
+                }
+               
+
+           
+        }
+    }
+}
+   
+
+
+}
+
+
+@media (max-width : 765px){
+    .new {
+        .container {
+                    .card {
+                        .catg {
+                            width: 60px;
+                            padding: 5px 10px;
+                            font-weight: 400;
+                            font-size: 15px;
+                            transform:  translate( 650% , 40%);
+                        }
+    
+                   
+            }
+        }
+               
+       }
+
+       .footup {
+    
+            .right {
+                padding-left: 50px;
+                input {
+                    width: 230px;
+                }
+    
+                    .link {
+                        button {
+                            height: 50px;
+                            padding: 15px 18px;
+                        }
+                    }
+                   
+    
+               
+            }
+        }
+    
+}
+
+@media (max-width : 400px) {
+    .footup{
+        .right {
+            padding: 20px 0;
+            padding-left: 50px;
+            input {
+                width: 180px;
+            }
+
+                .link {
+                    button {
+                        height: 50px;
+                        padding: 15px 18px;
+                    }
+                }
+               
+
+           
+        }
+    }
+
+
+}

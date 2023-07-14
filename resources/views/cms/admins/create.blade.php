@@ -29,6 +29,18 @@
 
               <div class="card-body">
 
+                      <div class="row">
+                          <div class="form-group col-md-6">
+                              <label>Roles</label>
+                              <select class="form-control select2" id="role_id" name="role_id" style="width: 100%;">
+                                  {{-- <option selected="selected">Alabama</option> --}}
+                                  @foreach($roles as $role)
+                                      <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      </div>
+
 
                  <div class="row">
 
@@ -77,6 +89,7 @@
       let formData = new FormData();
       formData.append('gmail',document.getElementById('gmail').value);
       formData.append('password',document.getElementById('password').value);
+        formData.append('role_id',document.getElementById('role_id').value);
 
 
       store('/cms/admin/admins' , formData);

@@ -61,15 +61,24 @@
                     <tr>
                       <th>ID</th>
                       <th>Email</th>
-                      <th>Seeting</th>
+                        <th>Role</th>
+                        <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     @foreach ($admins as $admin)
                     <tr>
                         <td>{{$admin->id}}</td>
-                        <td>{{$admin->gmail}}</td>
 
+                        <td>{{$admin->gmail}}</td>
+                        <td>
+                            @foreach ($admin->roles as $role)
+                                {{ $role->name }}
+                                @if (!$loop->last)
+                                    ,
+                                @endif
+                            @endforeach
+                        </td>
 
                         <td>
                             <div class="btn group">

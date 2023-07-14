@@ -46,6 +46,9 @@
                       <option value="admin">
                           admin
                       </option>
+                      <option value="author">
+                          author
+                      </option>
                   </select>
 
               </div>

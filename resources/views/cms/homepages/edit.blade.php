@@ -49,7 +49,7 @@
                   <label for="img">Image of Author</label>
                   <input type="file" class="form-control" id="img" name="img" placeholder="Enter img of product">
                 </div>
-                 </div>  
+                 </div>
 
 
 

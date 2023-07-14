@@ -13,9 +13,7 @@ class Author extends Authenticatable
     use HasFactory , HasRoles;
 
     protected $fillable = [
-        // other attributes
         'gmail',
         'password',
-
     ];
 }

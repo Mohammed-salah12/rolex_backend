@@ -2,38 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateOpinionRequest;
+use App\Http\Requests\HomePageRequest;
+use App\Http\Requests\OpinionRequest;
 use App\Models\Opinion;
 use App\repositories\OpinionRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 
 class OpinionController extends Controller
 {
-    /**
-     * @var OpinionRepository
-     */
+
     /**
      * @var OpinionRepository
      */
     private $opinionRepository;
+
+    public function __construct(OpinionRepository $opinionRepository)
+    {
+        $this->opinionRepository = $opinionRepository;
+    }
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-     public  function  __construct(OpinionRepository $opinionRepository)
-     {
-
-         $this->opinionRepository = $opinionRepository;
-     }
-
     public function index()
     {
-        $opinions = $this->opinionRepository->getopinions();
-        return response()->view('cms.opinions.index', compact('opinions'));
+        $this->authorize('viewAny' , Opinion::class);
+        $opinions = $this->opinionRepository->getLatestOpinionsWithPaginate();
+        return $this->generateResponse('index' , compact('opinions'));
     }
 
     /**
@@ -43,7 +41,9 @@ class OpinionController extends Controller
      */
     public function create()
     {
-        return $this->opinionRepository->create();
+        $this->authorize('create' , Opinion::class);
+        $this->opinionRepository->getPage();
+        return $this->generateResponse('create');
 
     }
 
@@ -53,23 +53,26 @@ class OpinionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request ,CreateOpinionRequest $createOpinionRequest)
+    public function store(OpinionRequest $request)
     {
-        $opinions = $this->opinionRepository->store($request, $createOpinionRequest);
-
-        return $opinions;
+        $opinions = new Opinion($request->validated());
+        if (request()->hasFile('img')) {
+            $img = $request->file('img');
+            $imgName = time() . 'img.' . $img->getClientOriginalExtension();
+            $img->move('storage/images/opinions', $imgName);
+            $opinions->img = $imgName;
+        }
+        $isSaved = $opinions->save();
+        if ($isSaved) {
+            $response = $this->generateSweetAlertResponse('success');
+            return $response;
+        } else {
+            $response = $this->generateSweetAlertResponse('error');
+            return $response;
+        }
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $opinions = $this->opinionRepository->findId($id);
 
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -79,8 +82,9 @@ class OpinionController extends Controller
      */
     public function edit($id)
     {
-        $opinions = $this->opinionRepository->findId($id);
-        return view('cms.opinions.edit', compact('opinions'));
+        $this->authorize('update' , Opinion::class);
+        $opinions=$this->opinionRepository->findId($id);
+        return $this->generateResponse('edit' , compact('opinions'));
 
 
     }
@@ -92,42 +96,25 @@ class OpinionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request, CreateOpinionRequest $createOpinionRequest)
+
+
+    public function update(OpinionRequest $request, $id)
     {
-        // Validate the request
-        $validator = Validator::make($request->all(), $createOpinionRequest->rules());
-
-        if ($validator->fails()) {
-            // Handle validation errors
-            return response()->json(['icon' => 'error', 'title' => 'Validation failed', 'errors' => $validator->errors()], 400);
-        }
-
-        // Find the opinion by ID
-        $opinion = $this->opinionRepository->findId($id);
-
-        // Update the opinion data
-        $opinion->massage = $request->input('massage');
-        $opinion->name = $request->input('name');
-        $opinion->job_name = $request->input('job_name');
+        $opinions = $this->opinionRepository->findId($id);
+        $opinions->update($request->validated());
 
         if ($request->hasFile('img')) {
             $img = $request->file('img');
-            $imgName = time() . 'img.' . $img->getClientOriginalExtension();
-            $img->move('storage/images/opinion', $imgName);
-            $opinion->img = $imgName;
+            $imageName = time() . 'img.' . $img->getClientOriginalExtension();
+            $img->move('storage/images/opinions', $imageName);
+            $opinions->img = $imageName;
+            $opinions->save();
         }
 
-        // Save the updated opinion
-        $isUpdated = $opinion->save();
 
-        if ($isUpdated) {
-            return response()->json(['icon' => 'success', 'title' => 'Updated successfully', 'redirect' => route('opinions.index')], 200);
-        } else {
-            return response()->json(['icon' => 'error', 'title' => 'Update failed'], 400);
-        }
+
+        return ['redirect'=>route('opinions.index')];
     }
-
-
 
     /**
      * Remove the specified resource from storage.
@@ -137,8 +124,33 @@ class OpinionController extends Controller
      */
     public function destroy($id)
     {
-        $opinions = $this->opinionRepository->findId($id);
-        $opinions = $this->opinionRepository->delete($id);
+        $this->authorize('delete' , Opinion::class);
+        $this->opinionRepository->findId($id);
+        $this->opinionRepository->delete($id);
+    }
 
+
+    function generateResponse($action, $data = [])
+    {
+
+        $view = 'cms.opinions.' . $action;
+        return response()->view($view, $data);
+    }
+
+    function generateSweetAlertResponse($status)
+    {
+        $response = [];
+
+        if ($status === 'success') {
+            $response['icon'] = 'success';
+            $response['title'] = 'Worked successfully';
+            $responseCode = 200;
+        } else {
+            $response['icon'] = 'error';
+            $response['title'] = 'Something went wrong ';
+            $responseCode = 400;
+        }
+
+        return response()->json($response, $responseCode);
     }
 }

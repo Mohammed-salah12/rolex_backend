@@ -24,8 +24,8 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'string' ,
-            'guard_name'=>'string|nullable',
+            'name'=>'string|required' ,
+            'guard_name'=>'string|required',
         ];
     }
 }

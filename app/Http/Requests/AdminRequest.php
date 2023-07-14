@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateOpinionRequest extends FormRequest
+class AdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +15,12 @@ class CreateOpinionRequest extends FormRequest
     {
         return true;
     }
-
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'password' => bcrypt($this->input('password'))
+        ]);
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,10 +29,8 @@ class CreateOpinionRequest extends FormRequest
     public function rules()
     {
         return [
-            'massage' => 'required|string',
-            'name' => 'required|string',
-            'job_name' => 'required|string',
-            'img' => 'required|string',
+            'gmail' => 'email|required',
+            'password' => 'string|required',
         ];
     }
 }

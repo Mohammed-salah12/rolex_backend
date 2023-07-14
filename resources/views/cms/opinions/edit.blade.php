@@ -2,7 +2,7 @@
 
 @extends('cms.parent')
 
-@section('title' , 'outhers')
+@section('title' , 'opinions')
 
 @section('main-title' , 'Create opinions')
 
@@ -60,6 +60,7 @@
                 <a href="{{ route('opinions.index') }}" type="button" class="btn btn-info">Return Back</a>
 
               </div>
+                  </div>
             </form>
           </div>
           <!-- /.card -->
@@ -86,7 +87,7 @@
         formData.append('job_name',document.getElementById('job_name').value);
         formData.append('img',document.getElementById('img').files[0]);
 
-      storeRoute('/cms/admin/update-opinions/'+id , formData);
+      storeRoute('/cms/admin/update-opinions/' + id , formData);
     }
 
   </script>

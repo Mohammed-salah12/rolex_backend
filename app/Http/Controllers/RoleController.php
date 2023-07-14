@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RoleRequest;
 use App\repositories\RoleRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -31,10 +32,12 @@ class RoleController extends Controller
 
     public function index()
     {
-        $roles=Role::latest()->paginate(5);
-        return response()->view('cms.spatie.role.index' , compact('roles'));
+        $this->authorize('viewAny-role');
+        $roles=Role::withCount('permissions')->latest()->paginate(5);
+        return $this->generateResponse('index' , compact('roles'));
 
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -43,7 +46,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-       return response()->view('cms.spatie.role.create');
+        $this->authorize('create-role');
+        return $this->generateResponse('create');
+
     }
 
     /**
@@ -55,34 +60,11 @@ class RoleController extends Controller
     public function store( RoleRequest $request)
     {
       Role::create($request->validated());
-      return response()->json(['icon'=>'success' , 'title'  => 'created succsefully' , 200]);
+        $response = $this->generateSweetAlertResponse('success');
+        return $response;
     }
 
-    /**
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $roles = $this->roleRepository->findId($id);
-        return response()->view('cms.spatie.role.edit' , compact('roles'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(RoleRequest $request, $id)
-    {
-
-      }
 
     /**
      * Remove the specified resource from storage.
@@ -92,8 +74,34 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('delete-role');
         $roles = $this->roleRepository->findId($id);
         $roles = $this->roleRepository->delete($id);
 
+
+    }
+
+    function generateResponse($action, $data = [])
+    {
+
+        $view = 'cms.spatie.role.' . $action;
+        return response()->view($view, $data);
+    }
+
+    function generateSweetAlertResponse($status)
+    {
+        $response = [];
+
+        if ($status === 'success') {
+            $response['icon'] = 'success';
+            $response['title'] = 'Worked successfully';
+            $responseCode = 200;
+        } else {
+            $response['icon'] = 'error';
+            $response['title'] = 'Something went wrong ';
+            $responseCode = 400;
+        }
+
+        return response()->json($response, $responseCode);
     }
 }

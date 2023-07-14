@@ -31,13 +31,13 @@
               <div class="row">
 
                 <div class="form-group col-md-6">
-                  <label for="product_name">name product</label>
-                  <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $products->product_name ?? ''}}" placeholder="product name" >
+                  <label for="name">name product</label>
+                  <input type="text" class="form-control" id="name" name="name" value="{{ $products->name ?? ''}}" placeholder="product name" >
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label for="price_product">price of product</label>
-                  <input type="text" class="form-control" id="price_product" name="price_product" placeholder="price of product" value="{{ $products->price_product ?? ''}}">
+                  <label for="price">price of product</label>
+                  <input type="text" class="form-control" id="price" name="price" placeholder="price of product" value="{{ $products->price ?? ''}}">
                 </div>
                 <div class="form-group col-md-12">
                   <label for="img">Image of Author</label>
@@ -52,12 +52,13 @@
                       </div>
                   </div>
 
-
+                  @csrf
+                  @method('PUT')
 
               <!-- /.card-body -->
 
               <div class="card-footer">
-              <button type="button" onclick="performUpdate({{$products->id  ?? '' }})" class="btn btn-primary">Update</button>
+              <button type="submit" onclick="performUpdate({{$products->id  ?? '' }})" class="btn btn-primary">Update</button>
                 <a href="{{ route('products.index') }}" type="button" class="btn btn-info">Return Back</a>
 
               </div>
@@ -82,8 +83,8 @@
     function performUpdate(id){
 
       let formData = new FormData();
-      formData.append('product_name',document.getElementById('product_name').value);
-      formData.append('price_product',document.getElementById('price_product').value);
+      formData.append('name',document.getElementById('name').value);
+      formData.append('price',document.getElementById('price').value);
         formData.append('img',document.getElementById('img').files[0]);
         formData.append('is_featured', document.getElementById('is_featured').checked ? 1 : 0);
 

@@ -39,7 +39,7 @@
             <div class="card">
               <div class="card-header">
                 {{-- <h3 class="card-title"> Index Data of Admin</h3> --}}
-                <a href="{{ route('products.create') }}" type="button" class="btn btn-info">Add New home page</a>
+                <a href="{{ route('homepages.create') }}" type="button" class="btn btn-info">Add New home page</a>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">

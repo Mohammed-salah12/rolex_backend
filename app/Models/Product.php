@@ -17,8 +17,8 @@ class Product extends Model
     ];
     protected $fillable = [
         // other attributes
-        'product_name',
-        'price_product',
+        'name',
+        'price',
         'img',
         'is_new',
         'is_featured',

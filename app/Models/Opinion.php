@@ -9,8 +9,11 @@ class Opinion extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:i:s',
-        'updated_at' => 'datetime:Y-m-d H:i:s',
+    protected $fillable = [
+        'name',
+        'massage',
+        'job_name',
+        'img',
+
     ];
 }

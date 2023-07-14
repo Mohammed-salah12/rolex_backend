@@ -74,7 +74,7 @@
                     {{-- <td><span class="tag tag-success">Approved</span></td> --}}
                     <tr>
                         <td>
-                            <img class="img-circle img-bordered-sm" src="{{asset('storage/images/opinion/'.$opinion->img)}}" width="60" height="60" alt="User Image">
+                            <img class="img-circle img-bordered-sm" src="{{asset('storage/images/opinions/'.$opinion->img)}}" width="60" height="60" alt="User Image">
                          </td>
                         <td>{{$opinion->id}}</td>
                         <td>{{$opinion->name}}</td>

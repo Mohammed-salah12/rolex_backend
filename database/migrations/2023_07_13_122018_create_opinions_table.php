@@ -15,8 +15,8 @@ class CreateOpinionsTable extends Migration
     {
         Schema::create('opinions', function (Blueprint $table) {
             $table->id();
-            $table->string('massage');
             $table->string('name');
+            $table->string('massage');
             $table->string('job_name');
             $table->string('img');
             $table->timestamps();

@@ -2,11 +2,11 @@
 @extends('cms.parent')
 
 
-@section('title' , 'role')
+@section('title' , 'permission')
 
-@section('main-title' , 'Create role')
+@section('main-title' , 'Create permission')
 
-@section('sub-title' , 'create role')
+@section('sub-title' , 'create permission')
 
 @section('styles')
 
@@ -21,11 +21,13 @@
           <!-- general form elements -->
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Create Data of role</h3>
+              <h3 class="card-title">Create Data of permission</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form>
+              @csrf
+
+              <form>
 
               <div class="card-body">
 
@@ -33,16 +35,19 @@
                  <div class="row">
 
                 <div class="form-group col-md-6">
-                  <label for="name">name of role</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter name of role" value="{{$roles->name}}">
+                  <label for="name">name of permission</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter name of permission">
                 </div>
 
 
               <div class="form-group col-md-6">
-                  <label for="guard_name" >guard</label>
-                  <select class="form-select form-select-sm" name="guard_name" id="guard_name" aria-label=".form-select-sm example" >
-                      <option value="admin" @if($roles->guard_name == 'admin') selected @endif>
+                  <label for="guard_name">guard</label>
+                  <select class="form-select form-select-sm form-control" name="guard_name" id="guard_name" aria-label=".form-select-sm example">
+                      <option value="admin">
                           admin
+                      </option>
+                      <option value="author">
+                          author
                       </option>
                   </select>
 
@@ -53,8 +58,8 @@
               <!-- /.card-body -->
 
               <div class="card-footer">
-                <button type="button" onclick="performUpdate()" class="btn btn-primary">Store</button>
-                <a href="{{ route('roles.index') }}" type="button" class="btn btn-info">Return Back</a>
+                <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
+                <a href="{{ route('permissions.index') }}" type="button" class="btn btn-info">Return Back</a>
 
               </div>
             </form>
@@ -77,14 +82,14 @@
 
 @section('scripts')
   <script>
-    function performUpdate(id){
+    function performStore(){
 
       let formData = new FormData();
       formData.append('name',document.getElementById('name').value);
       formData.append('guard_name',document.getElementById('guard_name').value);
 
 
-      storeRoute('/cms/admin/update-roles/'+id , formData);
+      store('/cms/admin/permissions' , formData);
     }
 
   </script>

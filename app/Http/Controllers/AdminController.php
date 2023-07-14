@@ -2,14 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminRequest;
+use App\repositories\AdminRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
+
+    /**
+     * @var AdminRepository
+     */
+    private $adminRepository;
+
+    public function __construct(AdminRepository $adminRepository)
+    {
+        $this->adminRepository = $adminRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,8 +30,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-      $admins=Admin::orderBy('id' , 'desc')->paginate(5);
-      return  response()->view('cms.admins.index' , compact('admins'));
+      $admins=$this->adminRepository->getLatestAdminsWithPaginate();
+      $roles=Role::all();
+        $this->authorize('viewAny' , Admin::class);
+        return $this->generateResponse('index' , compact('admins' , 'roles'));
     }
 
     /**
@@ -28,45 +43,28 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $admins=Admin::all();
-        return response()->view('cms.admins.create',compact('admins'));    }
-
+        $admins=$this->adminRepository->getPage();
+        $roles = Role::where('guard_name', 'admin')->get();
+        $this->authorize('create', Admin::class);
+        return $this->generateResponse('create', compact('admins', 'roles'));
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdminRequest $request)
     {
-        $valedetor=validator(request()->all([
-            'password'=>'required|password' ,
-            'gmail'=>'required' ,
+        $data = $request->validated();
+        $admins = Admin::create($data);
+        $roles = Role::findOrFail($request->input('role_id'));
+        $admins->roles()->sync([$roles->id]);;
+        $response = $this->generateSweetAlertResponse('success');
+        return $response;
 
-           ]));
-           if(! $valedetor->fails() ){
-            $admins= new Admin();
-            $admins->gmail=$request->get('gmail');
-            $admins->password=Hash::make($request->get('password'));
-            $IsSaved=$admins->save();
-            if ($IsSaved) {
-                return response()->json(['icon' => 'success', 'title' => "Created is successfully"], 200);
-            } else {
-                return response()->json(['icon' => 'Failed', 'title' => "Created is Failed"], 400);
-            }
-           }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -76,8 +74,10 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        $admins=Admin::findOrFail($id);
-        return response()->view('cms.admins.edit',compact('admins'));
+        $admins=$this->adminRepository->findId($id);
+        $roles = Role::where('guard_name' , 'admin')->get();
+        $this->authorize('update' , Admin::class);
+        return $this->generateResponse('edit', compact('admins', 'roles'));
     }
 
     /**
@@ -94,7 +94,9 @@ class AdminController extends Controller
         ]);
 
         if(! $validator->fails()){
-            $admins = Admin::findOrFail($id);
+            $admins=$this->adminRepository->findId($id);
+//            $roles = Role::findOrFail($request->get('role_id'));
+//            $admins->assignRole($roles->name);
             $admins->gmail = $request->get('gmail');
             $isSaved = $admins->save();
 
@@ -117,7 +119,32 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        $admins = Admin::destroy($id);
+        $this->authorize('delete' , Admin::class);
+        $this->adminRepository->findId($id);
+        $this->adminRepository->delete($id);
+    }
 
+
+    function generateResponse($action, $data = [])
+    {
+        $view = 'cms.admins.' . $action;
+        return response()->view($view, $data);
+    }
+
+    function generateSweetAlertResponse($status)
+    {
+        $response = [];
+
+        if ($status === 'success') {
+            $response['icon'] = 'success';
+            $response['title'] = 'Worked successfully';
+            $responseCode = 200;
+        } else {
+            $response['icon'] = 'error';
+            $response['title'] = 'Something went wrong ';
+            $responseCode = 400;
+        }
+
+        return response()->json($response, $responseCode);
     }
 }

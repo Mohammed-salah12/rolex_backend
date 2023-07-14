@@ -24,5 +24,11 @@ class RoleRepository
         return $this->model->destroy($id);
 
     }
-
+    public function getPage()
+    {
+        return $this->model->get();
+    }
+    public function getLatestRolesWithPaginate(){
+        return $this->model->latest()->paginate(5);
+    }
 }

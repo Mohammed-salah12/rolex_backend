@@ -6,6 +6,7 @@ use App\Http\Requests\AuthorRequset;
 use App\Models\Author;
 use App\repositories\AuthorRepository;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class AuthorController extends Controller
 {
@@ -29,7 +30,8 @@ class AuthorController extends Controller
 
     public function index()
     {
-       $authors=Author::latest()->paginate(5);
+       $authors=$this->authorRepository->getLatestAuthorsWithPaginate();
+        $this->authorize('viewAny' , Author::class);
         return $this->generateResponse('index' , compact('authors'));
     }
 
@@ -40,7 +42,10 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        return $this->generateResponse('create');
+        $authors=$this->authorRepository->getPage();
+        $roles = Role::where('guard_name' , 'author')->get();
+        $this->authorize('create' , Author::class);
+        return $this->generateResponse('create' , compact('roles'));
 
     }
 
@@ -52,10 +57,12 @@ class AuthorController extends Controller
      */
     public function store(AuthorRequset $request)
     {
-        Author::create($request->validated());
 
+        $data = $request->validated();
+        $author = Author::create($data);
+        $roles = Role::findOrFail($request->input('role_id'));
+        $author->roles()->sync([$roles->id]);;
         $response = $this->generateSweetAlertResponse('success');
-
         return $response;
     }
 
@@ -69,7 +76,9 @@ class AuthorController extends Controller
     public function edit($id)
     {
         $authors = $this->authorRepository->findId($id);
-        return $this->generateResponse('edit',  compact('authors'));
+        $roles = Role::where('guard_name' , 'author')->get();
+        $this->authorize('update' , Author::class);
+        return $this->generateResponse('edit',  compact('authors' , 'roles'));
 
     }
 
@@ -86,12 +95,6 @@ class AuthorController extends Controller
           'password' => 'nullable',
             'gmail'=> 'required|email'
        ]);
-
-        $authors = Author::findOrFail($id);
-        $validator = Validator($request->all() , [
-            'password' => 'nullable',
-            'gmail'=> 'required|email'
-        ]);
 
         $author = $this->authorRepository->findId($id);
         $author->fill($request->only('gmail'));
@@ -119,8 +122,10 @@ class AuthorController extends Controller
      */
     public function destroy($id)
     {
-        $author = $this->authorRepository->findId($id);
-        $author = $this->authorRepository->delete($id);
+        $this->authorize('delete' , Author::class);
+        $this->authorRepository->findId($id);
+        $this->authorRepository->delete($id);
+
 
     }
 

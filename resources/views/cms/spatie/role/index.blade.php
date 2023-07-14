@@ -58,29 +58,30 @@
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                   <thead>
-                    <tr>
+                  <tr>
                       <th>ID</th>
-                      <th>name</th>
-                        <th>guard_name</th>
-
-                        <th>Seeting</th>
-                    </tr>
+                      <th>Roles Name</th>
+                      <th>Name</th>
+                      <th>Permissions</th>
+                      <th>Seeting</th>
+                  </tr>
                   </thead>
-                  <tbody>
-                    @foreach ($roles as $role)
-                    <tr>
-                        <td>{{$role->id}}</td>
-                        <td>{{$role->name}}</td>
-                        <td>{{$role->guard_name}}</td>
+                    <tbody>
+                    @foreach ($roles as $role )
+                        {{-- <td><span class="tag tag-success">Approved</span></td> --}}
+
+                        <tr>
+                            <td>{{$role->id}}</td>
+                            <td>{{$role->guard_name }}</td>
+                            <td>{{$role->name}}</td>
+
+                            <td><a href="{{route('roles.permissions.index', $role->id)}}"
+                                   class="btn btn-info">({{$role->permissions_count}})
+                                    permissions/s</a> </td>
 
 
-
-                        <td>
+                            <td>
                             <div class="btn group">
-                              <a href="{{route('admins.edit' , $role->id)}}" type="button" class="btn btn-info">
-                                <i class="fas fa-edit"></i>
-                                {{-- <i class="far fa-edit"></i> --}}
-                              </a>
                               <a href="#" type="button" onclick="performDestroy({{ $role->id }} , this)" class="btn btn-danger">
                                 <i class="fas fa-trash-alt"></i>
                               </a>

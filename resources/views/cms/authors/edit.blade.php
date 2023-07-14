@@ -82,7 +82,7 @@
 
       let formData = new FormData();
       formData.append('gmail',document.getElementById('gmail').value);
-      storeRoute('/cms/admin/update-authors/'+id , formData);
+        storeRoute('/cms/admin/update-authors/'+id , formData);
     }
 
   </script>

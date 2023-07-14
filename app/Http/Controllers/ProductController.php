@@ -2,39 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+
+
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+        public function index()
     {
         $products = Product::where(function ($query) {
             $query->where('is_new', 1)
                 ->orWhere('created_at', '>=', now()->subDays(7));
         })
-            ->orderBy('id', 'desc')
+            ->latest()
             ->paginate(5);
 
         // Update is_new to 0 for products older than 7 days
         $this->updateOldProductsStatus();
-        $featuredProducts = Product::where('is_featured', true)->get();
+        $featuredProducts = Product::where('is_featured', 1)->get();
 
+        $this->authorize('viewAny' , Product::class);
 
-        return response()->view('cms.products.index', compact('products'));
+        return $this->generateResponse('index' , compact('products'));
+
     }
 
 
     private function updateOldProductsStatus()
     {
         $oldProducts = Product::where('created_at', '<=', now()->subDays(7))->get();
-
         foreach ($oldProducts as $product) {
             $product->is_new = 0;
             $product->save();
@@ -47,8 +62,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $products=Product::get();
-        return response()->view('cms.products.create',compact('products'));
+        $this->authorize('create' , Product::class);
+        $this->productRepository->getPage();
+        return $this->generateResponse('create');
+
 
     }
 
@@ -58,56 +75,27 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $validator = Validator($request->all(), [
-            'price_product' => 'string',
-            'is_new' => 'boolean',
-            'is_featured' => 'boolean',
-
-
-        ]);
-
-        if (!$validator->fails()) {
-            $products = new Product();
-            if (request()->hasFile('img')) {
-
-                $img = $request ->file('img');
-
-                $imgName = time() . 'img.' . $img->getClientOriginalExtension();
-
-                $img->move('storage/images/products', $imgName);
-
-                $products->img = $imgName;
-            }
-            $products->is_new = true;
-            $products->created_at = now();
-            $products->product_name = $request->get('product_name');
-            $products->is_featured = $request->boolean('is_featured') ? 1 : 0;
-            $products->price_product = $request->get('price_product');
-
-            $isSaved  = $products->save();
-
-            if ($isSaved) {
-                return response()->json(['icon' => 'success', 'title' => "Created is successfully"], 200);
-            } else {
-                return response()->json(['icon' => 'error', 'title' => "Created is Failed"], 400);
-            }
-        } else {
-            return response()->json(['icon' => 'error', 'title' => $validator->getMessageBag()->first()], 400);
+        $products = new Product();
+        $products->fill($request->validated());
+        if ($request->hasFile('img')) {
+            $img = $request->file('img');
+            $imgName = time() . 'img.' . $img->getClientOriginalExtension();
+            $img->move('storage/images/products', $imgName);
+            $products->img = $imgName;
         }
+        $products->is_new = 1;
+        $products->created_at = now();
+        $products->is_featured = $request->boolean('is_featured') ? 1 : 0;
+        $isSaved = $products->save();
+        $response = $isSaved
+            ? $this->generateSweetAlertResponse('success')
+            : $this->generateSweetAlertResponse('error');
+        return $response;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -117,8 +105,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $products = Product::find($id);
-        return response()->view('cms.products.edit' , compact('products'));
+        $this->authorize('update' , Product::class);
+        $products =$this->productRepository->findId($id);
+        return $this->generateResponse('edit' , compact('products'));
     }
 
     /**
@@ -128,50 +117,27 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        $validator = Validator($request->all() , [
-            'name_product' => 'nullable|string|',
-            'price_product' => 'nullable',
-            'is_new' => 'boolean',
-            'is_featured' => 'boolean',
 
-        ]);
+        $products = $this->productRepository->findId($id);
+        $products->update($request->validated());
 
-        if (! $validator->fails()){
-
-            $products = Product::findOrFail($id);
-            $products->product_name = $request->get('product_name');
-            $products->price_product = $request->get('price_product');
-            $products->is_featured = $request->boolean('is_featured') ? 1 : 0;
-
-            $isUpdated = $products->save();
-
-            if (request()->hasFile('img')) {
-
-                $img = $request->file('img');
-
-                $imageName = time() . 'img.' . $img->getClientOriginalExtension();
-
-                $img->move('storage/images/products', $imageName);
-
-                $products->img = $imageName;
-                }
-                $isUpdated = $products->save();
-
-            return ['redirect' => route('products.index')];
-            if($isUpdated){
-                return response()->json(['icon' => 'success' , 'title' => 'Updated is Successfully'] , 200);
-            }
-            else{
-                return response()->json(['icon' => 'error' , 'title' => 'Updated is Failed'] , 400);
-
-            }
+        if ($request->hasFile('img')) {
+            $img = $request->file('img');
+            $imageName = time() . 'img.' . $img->getClientOriginalExtension();
+            $img->move('storage/images/products', $imageName);
+            $products->img = $imageName;
         }
-        else{
-            return response()->json(['icon' => 'error' , 'title' => $validator->getMessageBag()->first()] , 400);
-        }
+
+        $products->is_new = 1;
+        $products->created_at = now();
+        $products->is_featured = $request->boolean('is_featured') ? 1 : 0;
+        $isUpdated = $products->save();
+
+        return redirect()->back();
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -181,9 +147,34 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $products = Product::destroy($id);
+        $this->authorize('delete' , Product::class);
+        $this->productRepository->findId($id);
+        $this->productRepository->delete($id);
     }
 
 
 
+    function generateResponse($action, $data = [])
+    {
+
+        $view = 'cms.products.' . $action;
+        return response()->view($view, $data);
+    }
+
+    function generateSweetAlertResponse($status)
+    {
+        $response = [];
+
+        if ($status === 'success') {
+            $response['icon'] = 'success';
+            $response['title'] = 'Worked successfully';
+            $responseCode = 200;
+        } else {
+            $response['icon'] = 'error';
+            $response['title'] = 'Something went wrong ';
+            $responseCode = 400;
+        }
+
+        return response()->json($response, $responseCode);
+    }
 }

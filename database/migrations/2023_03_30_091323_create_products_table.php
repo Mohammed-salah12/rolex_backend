@@ -15,8 +15,8 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('product_name');
-            $table->string('price_product');
+            $table->string('name');
+            $table->string('price');
             $table->string('img');
             $table->boolean('is_new')->default(1);
             $table->boolean('is_featured')->default(0);
