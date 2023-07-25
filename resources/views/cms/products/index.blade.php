@@ -64,7 +64,6 @@
                       <th>price</th>
                         <th>status</th> <!-- New column for status/badge -->
                         <th>featured</th> <!-- New column for status/badge -->
-
                         <th>actions</th>
                     </tr>
                   </thead>

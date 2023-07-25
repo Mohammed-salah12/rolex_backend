@@ -128,7 +128,27 @@ class OpinionController extends Controller
         $this->opinionRepository->findId($id);
         $this->opinionRepository->delete($id);
     }
+    public function deletedOpinions()
+    {
+        $deletedOpinions = Opinion::onlyTrashed()->get();
 
+        return view('cms.opinions.deleted-opinions', compact('deletedOpinions'));
+    }
+    public function restore($id)
+    {
+        $record = Opinion::withTrashed()->findOrFail($id);
+        $record->restore();
+        return redirect()->route('opinions.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $record = Opinion::withTrashed()->findOrFail($id);
+        $record->forceDelete();
+        return redirect()->route('opinions.index');
+
+
+    }
 
     function generateResponse($action, $data = [])
     {

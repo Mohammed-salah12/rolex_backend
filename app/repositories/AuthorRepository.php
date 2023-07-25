@@ -31,4 +31,5 @@ class AuthorRepository
     public function getLatestAuthorsWithPaginate(){
         return $this->model->latest()->paginate(5);
     }
+
 }

@@ -127,7 +127,27 @@ class HomepageController extends Controller
 
     }
 
+    public function deletedHomepages()
+    {
+        $deletedHomepages = Homepage::onlyTrashed()->get();
 
+        return view('cms.homepages.deleted-homepages', compact('deletedHomepages'));
+    }
+    public function restore($id)
+    {
+        $record = Homepage::withTrashed()->findOrFail($id);
+        $record->restore();
+        return redirect()->route('homepages.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $record = Homepage::withTrashed()->findOrFail($id);
+        $record->forceDelete();
+        return redirect()->route('homepages.index');
+
+
+    }
     function generateResponse($action, $data = [])
     {
         $view = 'cms.homepages.' . $action;

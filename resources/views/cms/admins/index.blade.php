@@ -66,61 +66,120 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($admins as $admin)
-                    <tr>
-                        <td>{{$admin->id}}</td>
-
-                        <td>{{$admin->gmail}}</td>
-                        <td>
-                            @foreach ($admin->roles as $role)
-                                {{ $role->name }}
-                                @if (!$loop->last)
-                                    ,
-                                @endif
-                            @endforeach
-                        </td>
-
-                        <td>
-                            <div class="btn group">
-                              <a href="{{route('admins.edit' , $admin->id)}}" type="button" class="btn btn-info">
-                                <i class="fas fa-edit"></i>
-                                {{-- <i class="far fa-edit"></i> --}}
-                              </a>
-                              <a href="#" type="button" onclick="performDestroy({{ $admin->id }} , this)" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i>
-                              </a>
-
-                            </div>
+                  @foreach ($admins as $admin)
+                      <tr>
+                          <td>{{$admin->id}}</td>
+                          <td>{{$admin->gmail}}</td>
+                          <td>
+                              @foreach ($admin->roles as $role)
+                                  {{ $role->name }}
+                                  @if (!$loop->last)
+                                  @endif
+                              @endforeach
                           </td>
+                          <td>
+                              <div class="btn-group">
+                                  <a href="{{ route('admins.edit', $admin->id) }}" type="button" class="btn btn-info">
+                                      <i class="fas fa-edit"></i>
+                                  </a>
 
-                        <td></td>
+                                  @if ($admin->trashed())
+                                      <form action="{{ route('admins.restore', $admin->id) }}" method="POST" style="display: inline">
+                                          @csrf
+                                          @method('PATCH')
+                                          <button type="submit" class="btn btn-success">Restore</button>
+                                      </form>
+                                  @else
+                                      <a href="#" onclick="performDestroy({{ $admin->id }}, this)" class="btn btn-danger">
+                                          <i class="fas fa-trash-alt"></i>
+                                      </a>
+                                  @endif
+                              </div>
+                          </td>
                       </tr>
-                    @endforeach
+                  @endforeach
+                  @endsection
 
+                  <!-- Add the following script at the end of your view -->
 
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-            {{ $admins->links()}}
-          </div>
-        </div>
+                  @section('scripts')
+                      <script>
+                          function performDestroy(id, reference) {
+                              let url = '/cms/admin/admins/' + id;
+                              confirmDestroy(url, reference);
+                          }
 
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-@endsection
+                          function performRestore(id, reference) {
+                              let url = '/cms/admin/admins/' + id + '/restore';
+                              confirmRestore(url, reference);
+                          }
 
+                          function confirmDestroy(url, reference) {
+                              Swal.fire({
+                                  title: 'Are you sure?',
+                                  text: 'This action cannot be undone.',
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                  confirmButtonColor: '#3085d6',
+                                  cancelButtonColor: '#d33',
+                                  confirmButtonText: 'Yes, delete it!',
+                                  cancelButtonText: 'Cancel',
+                              }).then((result) => {
+                                  if (result.isConfirmed) {
+                                      axios.delete(url)
+                                          .then(() => {
+                                              Swal.fire(
+                                                  'Deleted!',
+                                                  'Admin has been deleted.',
+                                                  'success'
+                                              );
+                                              $(reference).closest('tr').fadeOut(300, function () {
+                                                  $(this).remove();
+                                              });
+                                          })
+                                          .catch(() => {
+                                              Swal.fire(
+                                                  'Error!',
+                                                  'An error occurred.',
+                                                  'error'
+                                              );
+                                          });
+                                  }
+                              });
+                          }
 
-@section('scripts')
-  <script>
-    function performDestroy(id , referance){
-      let url = '/cms/admin/admins/'+id;
-      confirmDestroy(url , referance );
-    }
-</script>
+                          function confirmRestore(url, reference) {
+                              Swal.fire({
+                                  title: 'Are you sure?',
+                                  text: 'This action will restore the admin.',
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                  confirmButtonColor: '#3085d6',
+                                  cancelButtonColor: '#d33',
+                                  confirmButtonText: 'Yes, restore it!',
+                                  cancelButtonText: 'Cancel',
+                              }).then((result) => {
+                                  if (result.isConfirmed) {
+                                      axios.patch(url)
+                                          .then(() => {
+                                              Swal.fire(
+                                                  'Restored!',
+                                                  'Admin has been restored.',
+                                                  'success'
+                                              );
+                                              $(reference).closest('tr').fadeOut(300, function () {
+                                                  $(this).remove();
+                                              });
+                                          })
+                                          .catch(() => {
+                                              Swal.fire(
+                                                  'Error!',
+                                                  'An error occurred.',
+                                                  'error'
+                                              );
+                                          });
+                                  }
+                              });
+                          }
+                      </script>
 @endsection

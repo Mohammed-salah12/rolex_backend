@@ -62,8 +62,7 @@
                       <th>ID</th>
                       <th>name</th>
                         <th>guard_name</th>
-
-                        <th>Seeting</th>
+                        <th>actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -72,9 +71,6 @@
                         <td>{{$permission->id}}</td>
                         <td>{{$permission->name}}</td>
                         <td>{{$permission->guard_name}}</td>
-
-
-
                         <td>
                             <div class="btn group">
                               <a href="#" type="button" onclick="performDestroy({{ $permission->id }} , this)" class="btn btn-danger">

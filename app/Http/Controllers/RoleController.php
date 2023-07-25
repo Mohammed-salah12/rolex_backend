@@ -81,6 +81,28 @@ class RoleController extends Controller
 
     }
 
+    public function deletedRoles()
+    {
+        $deletedRoles = Role::onlyTrashed()->get();
+
+        return view('cms.spatie.role.deleted-roles', compact('deletedRoles'));
+    }
+    public function restore($id)
+    {
+        $record = Role::withTrashed()->findOrFail($id);
+        $record->restore();
+        return redirect()->route('roles.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $record = Role::withTrashed()->findOrFail($id);
+        $record->forceDelete();
+        return redirect()->route('roles.index');
+
+
+    }
+
     function generateResponse($action, $data = [])
     {
 

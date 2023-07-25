@@ -77,7 +77,11 @@
 
                             <td><a href="{{route('roles.permissions.index', $role->id)}}"
                                    class="btn btn-info">({{$role->permissions_count}})
-                                    permissions/s</a> </td>
+                                    permissions/s</a>
+
+                            </td>
+
+
 
 
                             <td>

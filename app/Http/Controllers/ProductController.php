@@ -151,7 +151,27 @@ class ProductController extends Controller
         $this->productRepository->findId($id);
         $this->productRepository->delete($id);
     }
+    public function deletedProducts()
+    {
+        $deletedProducts = Product::onlyTrashed()->get();
 
+        return view('cms.products.deleted-products', compact('deletedProducts'));
+    }
+    public function restore($id)
+    {
+        $record = Product::withTrashed()->findOrFail($id);
+        $record->restore();
+        return redirect()->route('products.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $record = Product::withTrashed()->findOrFail($id);
+        $record->forceDelete();
+        return redirect()->route('products.index');
+
+
+    }
 
 
     function generateResponse($action, $data = [])

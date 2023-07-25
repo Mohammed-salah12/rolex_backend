@@ -20,6 +20,8 @@ class CreateProductsTable extends Migration
             $table->string('img');
             $table->boolean('is_new')->default(1);
             $table->boolean('is_featured')->default(0);
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ class CreateHomepagesTable extends Migration
             $table->string('discription');
             $table->string('price');
             $table->string('img');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

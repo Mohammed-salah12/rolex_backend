@@ -17,6 +17,7 @@ class CreateAdminsTable extends Migration
             $table->id();
             $table->string('gmail');
             $table->string('password');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,5 +30,6 @@ class CreateAdminsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('admins');
+
     }
 }

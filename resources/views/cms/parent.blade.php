@@ -252,6 +252,12 @@
                                 </a>
                             </li>
                                 @endcan
+                                <li class="nav-item">
+                                    <a href="{{ route('roles.deleted') }}" class="nav-link">
+                                        <i class="fas fa-folder-plus"></i>
+                                        <p>Deleted Roles</p>
+                                    </a>
+                                </li>
                         </ul>
                     </li>
                         @endcanany
@@ -285,6 +291,12 @@
                                 </a>
                             </li>
                                 @endcan
+                            <li class="nav-item">
+                                <a href="{{ route('permissions.deleted') }}" class="nav-link">
+                                    <i class="fas fa-folder-plus"></i>
+                                    <p>Deleted Permissions</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                         @endcanany
@@ -322,6 +334,13 @@
                                 </a>
                             </li>
                                 @endcan
+                                <li class="nav-item">
+                                    <a href="{{ route('admins.deleted') }}" class="nav-link">
+                                        <i class="fas fa-folder-plus"></i>
+                                        <p>Deleted Admins</p>
+                                    </a>
+                                </li>
+
                         </ul>
                     </li>
                         @endcan
@@ -355,6 +374,12 @@
                                 </a>
                             </li>
                                 @endcan
+                                <li class="nav-item">
+                                    <a href="{{ route('authors.deleted') }}" class="nav-link">
+                                        <i class="fas fa-folder-plus"></i>
+                                        <p>Deleted Authors</p>
+                                    </a>
+                                </li>
                         </ul>
                     </li>
                         @endcanany
@@ -392,6 +417,12 @@
                                 </a>
                             </li>
                                 @endcan
+                                <li class="nav-item">
+                                    <a href="{{ route('products.deleted') }}" class="nav-link">
+                                        <i class="fas fa-folder-plus"></i>
+                                        <p>Deleted Products</p>
+                                    </a>
+                                </li>
                         </ul>
                     </li>
                         @endcanany
@@ -426,6 +457,12 @@
                                 </a>
                             </li>
                                 @endcan
+                                <li class="nav-item">
+                                    <a href="{{ route('homepages.deleted') }}" class="nav-link">
+                                        <i class="fas fa-folder-plus"></i>
+                                        <p>Deleted HomePages</p>
+                                    </a>
+                                </li>
                         </ul>
                     </li>
                         @endcanany
@@ -459,6 +496,12 @@
                                 </a>
                             </li>
                                 @endcan
+                                <li class="nav-item">
+                                    <a href="{{ route('opinions.deleted') }}" class="nav-link">
+                                        <i class="fas fa-folder-plus"></i>
+                                        <p>Deleted Opinions</p>
+                                    </a>
+                                </li>
                         </ul>
                     </li>
                   @endcanany

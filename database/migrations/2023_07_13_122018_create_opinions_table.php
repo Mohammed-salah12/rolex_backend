@@ -19,6 +19,7 @@ class CreateOpinionsTable extends Migration
             $table->string('massage');
             $table->string('job_name');
             $table->string('img');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -86,7 +86,27 @@ class PermissionController extends Controller
 
     }
 
+    public function deletedPermissions()
+    {
+        $deletedPermissions = Permission::onlyTrashed()->get();
 
+        return view('cms.spatie.permission.deleted-permissions', compact('deletedPermissions'));
+    }
+    public function restore($id)
+    {
+        $record = Permission::withTrashed()->findOrFail($id);
+        $record->restore();
+        return redirect()->route('permissions.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $record = Permission::withTrashed()->findOrFail($id);
+        $record->forceDelete();
+        return redirect()->route('permissions.index');
+
+
+    }
     function generateResponse($action, $data = [])
     {
         $view = 'cms.spatie.permission.' . $action;

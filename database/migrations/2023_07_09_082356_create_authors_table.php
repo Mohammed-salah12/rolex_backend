@@ -17,6 +17,7 @@ class CreateAuthorsTable extends Migration
             $table->id();
             $table->string('gmail');
             $table->string('password');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

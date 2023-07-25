@@ -58,8 +58,6 @@ class AdminController extends Controller
     {
         $data = $request->validated();
         $admins = Admin::create($data);
-        $roles = Role::findOrFail($request->input('role_id'));
-        $admins->roles()->sync([$roles->id]);;
         $response = $this->generateSweetAlertResponse('success');
         return $response;
 
@@ -89,6 +87,8 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+
         $validator = Validator($request->all() , [
             'password' => 'nullable',
         ]);
@@ -123,8 +123,27 @@ class AdminController extends Controller
         $this->adminRepository->findId($id);
         $this->adminRepository->delete($id);
     }
+    public function deletedAdmins()
+    {
+        $deletedAdmins = Admin::onlyTrashed()->get();
+
+        return view('cms.admins.deleted-admins', compact('deletedAdmins'));
+    }
+    public function restore($id)
+    {
+        $record = Admin::withTrashed()->findOrFail($id);
+        $record->restore();
+        return redirect()->route('admins.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $record = Admin::withTrashed()->findOrFail($id);
+        $record->forceDelete();
+        return redirect()->route('admins.index');
 
 
+    }
     function generateResponse($action, $data = [])
     {
         $view = 'cms.admins.' . $action;

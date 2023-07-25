@@ -129,6 +129,28 @@ class AuthorController extends Controller
 
     }
 
+    public function deletedAuthors()
+    {
+        $deletedAuthors = Author::onlyTrashed()->get();
+
+        return view('cms.authors.deleted-authors', compact('deletedAuthors'));
+    }
+    public function restore($id)
+    {
+        $record = Author::withTrashed()->findOrFail($id);
+        $record->restore();
+        return redirect()->route('authors.index');
+    }
+
+    public function forceDelete($id)
+    {
+        $record = Author::withTrashed()->findOrFail($id);
+        $record->forceDelete();
+        return redirect()->route('authors.index');
+
+
+    }
+
     function generateResponse($action, $data = [])
     {
         $view = 'cms.authors.' . $action;

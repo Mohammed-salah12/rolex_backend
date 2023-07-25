@@ -46,7 +46,7 @@
               </div>
 
               <div class="form-group col-md-12">
-                <label for="img">Image of Author</label>
+                <label for="img">Image of person</label>
                 <input type="file" class="form-control" id="img" name="img" placeholder="Enter img of product">
               </div>
                </div>

@@ -110,7 +110,7 @@
 @section('scripts')
   <script>
     function performDestroy(id , referance){
-      let url = '/cms/Author/authors/'+id;
+      let url = '/cms/admin/authors/'+id;
       confirmDestroy(url , referance );
     }
 </script>
